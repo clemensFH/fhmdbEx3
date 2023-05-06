@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.database.DatabaseManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,6 +18,14 @@ public class FhmdbApplication extends Application {
         stage.setTitle("FHMDb!");
         stage.setScene(scene);
         stage.show();
+
+        /* III test entry, before final integration
+        try {
+            DatabaseManager.getInstance().testDB();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+         */
     }
 
     public static void main(String[] args) {
