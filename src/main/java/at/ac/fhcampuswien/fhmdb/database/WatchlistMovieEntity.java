@@ -6,6 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.StringBuilder;
 
 @DatabaseTable(tableName = "watchlist")
 public class WatchlistMovieEntity {
@@ -48,8 +49,16 @@ public class WatchlistMovieEntity {
         this.rating = rating;
     }
 
-    // Methode:<List>Genres sollen als String durch „,“ getrennt gespeichert werden (Stringbuilder, Stringsplit)
-    // String genresToString(List<Genre> genres) {}
-
-    //ToDo: Eigene Tabelle f Objekte, Listen & Verweis (od Umwandeln d Listen in String?)
+    // ToDo: Genres to String
+    String genresToString(List<Genre> genres) {
+        StringBuilder strbul = new StringBuilder();
+        for (Genre genresElement : genres) {
+            strbul.append(genresElement);
+            strbul.append(",");
+        }
+        strbul.setLength(strbul.length()-1); // to remove last comma
+        String newGenreString = strbul.toString();
+        return newGenreString;
+    }
+    // https://java2blog.com/java-list-to-string/#:~:text=We%20can%20use%20StringBuilder%20class,String%20class%20at%20the%20end.
 }

@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
+import at.ac.fhcampuswien.fhmdb.database.DatabaseManager;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.jfoenix.controls.JFXButton;
 import javafx.geometry.Insets;
@@ -57,6 +58,17 @@ public class MovieCell extends ListCell<Movie> {
             // Movie zur Watchlist hinzufügen
             // siehe Angabe Punkt Business/Logic-Layer
         });
+        /*
+        addToWatchlistBtn.setOnMouseClicked(mouseEvent -> { // T: mouseclickEvent adds movie
+            // try-Catch, weil UserCell n. propagieren
+            try {
+                repository.addToWatchlist(getItem());   //? getItem; ToDo: movie wird nicht in Tabelle anglegt 1:19:03
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            //DatabaseManager.getInstance().dao.create();
+
+        */
     }
 
     private VBox getDetails() {
