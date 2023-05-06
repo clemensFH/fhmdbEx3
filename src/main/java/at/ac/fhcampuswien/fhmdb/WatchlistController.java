@@ -5,6 +5,7 @@ import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import at.ac.fhcampuswien.fhmdb.ui.WatchlistCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -22,10 +23,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-public class HomeController implements Initializable {
+
+public class WatchlistController implements Initializable {
+
     @FXML
     public JFXButton searchBtn;
 
@@ -33,7 +34,7 @@ public class HomeController implements Initializable {
     public TextField searchField;
 
     @FXML
-    public JFXListView movieListView;
+    public JFXListView watchListView;
 
     @FXML
     public JFXComboBox genreComboBox;
@@ -48,7 +49,7 @@ public class HomeController implements Initializable {
     public JFXButton sortBtn;
 
     @FXML
-    public JFXButton watchlistBtn;
+    public JFXButton homeviewBtn;
 
     public List<Movie> allMovies;
 
@@ -64,14 +65,20 @@ public class HomeController implements Initializable {
 
     public void initializeState() {
         List<Movie> result = MovieAPI.getAllMovies();
+        // Obere Zeile ersetzen durch
+        /**
+         * WatchlistRepository watchlistRepo = new WatchlistRepository();
+         * List<Movie> result = watchlistRepo.getAll();
+         */
+
         setMovies(result);
         setMovieList(result);
         sortedState = SortedState.NONE;
     }
 
     public void initializeLayout() {
-        movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
-        movieListView.setCellFactory(movieListView -> new MovieCell()); // apply custom cells to the listview
+        watchListView.setItems(observableMovies);   // set the items of the listview to the observable list
+        watchListView.setCellFactory(movieListView -> new WatchlistCell()); // apply custom cells to the listview
 
         // genre combobox
         Object[] genres = Genre.values();   // get all genres
@@ -137,8 +144,8 @@ public class HomeController implements Initializable {
         }
 
         return movies.stream().filter(movie ->
-                movie.getTitle().toLowerCase().contains(query.toLowerCase()) ||
-                movie.getDescription().toLowerCase().contains(query.toLowerCase()))
+                        movie.getTitle().toLowerCase().contains(query.toLowerCase()) ||
+                                movie.getDescription().toLowerCase().contains(query.toLowerCase()))
                 .toList();
     }
 
@@ -201,12 +208,13 @@ public class HomeController implements Initializable {
         sortMovies();
     }
 
-    public void watchlistBtnClicked(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("watchlist-view.fxml"));
 
-        Stage window = (Stage)watchlistBtn.getScene().getWindow();
-        Scene watchlistScene = new Scene(root, 890, 620);
-        watchlistScene.getStylesheets().add(Objects.requireNonNull(FhmdbApplication.class.getResource("styles.css")).toExternalForm());
-        window.setScene(watchlistScene);
+    public void homeviewBtnClicked(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("home-view.fxml"));
+
+        Stage window = (Stage)homeviewBtn.getScene().getWindow();
+        window.setScene(new Scene(root, 890, 620));
     }
+
+
 }

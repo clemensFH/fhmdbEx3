@@ -12,20 +12,20 @@ import javafx.scene.paint.Color;
 
 import java.util.stream.Collectors;
 
-public class MovieCell extends ListCell<Movie> {
+public class WatchlistCell extends ListCell<Movie> {
     private final Label title = new Label();
     private final Label detail = new Label();
     private final Label genre = new Label();
     private final JFXButton detailBtn = new JFXButton("Show Details");
-    private final JFXButton addBtn = new JFXButton("Add to Watchlist");
-    private final VBox layout = new VBox(title, detail, genre,addBtn, detailBtn);
+    private final JFXButton removeBtn = new JFXButton("Remove");
+    private final VBox layout = new VBox(title, detail, genre, removeBtn, detailBtn);
     private boolean collapsedDetails = true;
 
-    public MovieCell() {
+    public WatchlistCell() {
         super();
         // color scheme
         detailBtn.setStyle("-fx-background-color: #f5c518;");
-        addBtn.setStyle("-fx-background-color: #f5c518;");
+        removeBtn.setStyle("-fx-background-color: #f5c518;");
         title.getStyleClass().add("text-yellow");
         detail.getStyleClass().add("text-white");
         genre.getStyleClass().add("text-white");
@@ -52,9 +52,9 @@ public class MovieCell extends ListCell<Movie> {
             setGraphic(layout);
         });
 
-        addBtn.setOnMouseClicked(mouseEvent -> {
+        removeBtn.setOnMouseClicked(mouseEvent -> {
             // todo
-            // Movie zur Watchlist hinzufügen
+            // Movie von Watchlist entfernen
             // siehe Angabe Punkt Business/Logic-Layer
         });
     }
@@ -112,4 +112,3 @@ public class MovieCell extends ListCell<Movie> {
         }
     }
 }
-

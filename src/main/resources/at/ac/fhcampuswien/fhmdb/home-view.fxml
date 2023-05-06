@@ -35,6 +35,7 @@
          <JFXComboBox fx:id="releaseYearComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <JFXComboBox fx:id="ratingFromComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <JFXButton fx:id="searchBtn" onAction="#searchBtnClicked" styleClass="background-yellow" stylesheets="@styles.css" text="Filter" />
+         <JFXButton fx:id="watchlistBtn" onAction="#watchlistBtnClicked" styleClass="background-yellow" stylesheets="@styles.css" text="Watchlist" />
       </children>
       <VBox.margin>
          <Insets />
