@@ -50,7 +50,7 @@ public class WatchlistMovieEntity {
     }
 
     // ToDo: Genres to String
-    String genresToString(List<Genre> genres) {
+    static String genresToString(List<Genre> genres) {
         StringBuilder strbul = new StringBuilder();
         for (Genre genresElement : genres) {
             strbul.append(genresElement);
