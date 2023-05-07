@@ -3,6 +3,7 @@ package at.ac.fhcampuswien.fhmdb;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -19,6 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -67,7 +69,11 @@ public class HomeController implements Initializable {
         try {
             watchlistRepository.addToWatchlist((Movie) clickedItem);
         } catch (DatabaseException e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("An error occurred while trying to add movie to watchlist");
+            alert.setContentText("Could not add data from the database");
+            alert.showAndWait();
         }
     };
 
@@ -81,7 +87,16 @@ public class HomeController implements Initializable {
     }
 
     public void initializeState() {
-        List<Movie> result = MovieAPI.getAllMovies();
+        List<Movie> result = null;
+        try {
+            result = MovieAPI.getAllMovies();
+        } catch (MovieApiException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("An error occurred while trying to initialize Move API");
+            alert.setContentText("Could not initialize movie from API");
+            alert.showAndWait();
+        }
         setMovies(result);
         setMovieList(result);
         sortedState = SortedState.NONE;
@@ -212,7 +227,16 @@ public class HomeController implements Initializable {
     }
 
     public List<Movie> getMovies(String searchQuery, Genre genre, String releaseYear, String ratingFrom) {
-        return MovieAPI.getAllMovies(searchQuery, genre, releaseYear, ratingFrom);
+        try {
+            return MovieAPI.getAllMovies(searchQuery, genre, releaseYear, ratingFrom);
+        } catch (MovieApiException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("An error occurred while trying to get movie");
+            alert.setContentText("Could not get movie from API");
+            alert.showAndWait();
+        }
+        return null;
     }
 
     public void sortBtnClicked(ActionEvent actionEvent) {

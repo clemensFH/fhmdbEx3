@@ -21,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -46,7 +47,11 @@ public class WatchlistController implements Initializable {
         try {
             watchlistRepository = new WatchlistRepository();
         } catch (DatabaseException e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("An error occurred while initializing watchlist");
+            alert.setContentText("Could not connect to the database");
+            alert.showAndWait();
         }
     }
 
@@ -54,14 +59,15 @@ public class WatchlistController implements Initializable {
     {
         try {
             watchlistRepository.removeFromWatchlist((WatchlistMovieEntity) clickedItem);
-            initializeState();
-        } catch (SQLException e) {
-            try {
-                throw new DatabaseException("Exception occurred while removing from Watchlist: " + e.getMessage(), e);
-            } catch (DatabaseException ex) {
-                ex.printStackTrace();
-            }
+        } catch (DatabaseException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("An error occurred while removing Movie from Watchlist");
+            alert.setContentText("Could not remove data from the database");
+            alert.showAndWait();
         }
+        initializeState();
+
     };
 
 
@@ -76,13 +82,23 @@ public class WatchlistController implements Initializable {
         try {
             watchlistRepo = new WatchlistRepository();
         } catch (DatabaseException e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("An error occurred while initializing watchlist");
+            alert.setContentText("Could not connect to the database");
+            alert.showAndWait();
         }
+
         List<WatchlistMovieEntity> result = null;
+
         try {
             result = watchlistRepo.getAll();
         } catch (DatabaseException e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("An error occurred while initializing watchlist");
+            alert.setContentText("Could not retrieve data from the database");
+            alert.showAndWait();
         }
 
         setMovieList(result);

@@ -5,6 +5,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import javafx.scene.control.Alert;
 
 import java.sql.SQLException;
 
@@ -19,7 +20,7 @@ public class DatabaseManager {  // class connects ORMLite & DB
 
     private static DatabaseManager instance; // II 4. Singleton Pattern, allowing only 1 object to be instantiated at a time
     private DatabaseManager() throws DatabaseException {  // II 4. constructor
-        try { //? besser propagieren, hier drin catchen n. sinnvoll
+        try {
             createConnectionSource(); // 1. create connection
             dao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class); // 2. fill up dao 15
             createTables(); // 3. create table
@@ -31,11 +32,7 @@ public class DatabaseManager {  // class connects ORMLite & DB
 
     public static DatabaseManager getInstance() throws DatabaseException {  // other class calls Database
         if (instance == null) { // if there is no instance yet, creates a new one
-            try {
-                instance = new DatabaseManager() ;
-            } catch (DatabaseException e) {
-                e.printStackTrace();
-            }
+            instance = new DatabaseManager() ;
         }
         return instance;
     }
@@ -50,8 +47,13 @@ public class DatabaseManager {  // class connects ORMLite & DB
             throw new DatabaseException(DATABASE_ERROR_MESSAGE, e);
         }
     }
-    private static void createConnectionSource() throws SQLException {  // 2b.
-        connectionSource = new JdbcConnectionSource(DB_URL, user, password);
+    private static void createConnectionSource() throws DatabaseException {
+        try {
+            connectionSource = new JdbcConnectionSource(DB_URL, user, password);
+        } catch (SQLException e) {
+            throw new DatabaseException("Error occurred while trying to creating a Connection Source.", e);
+        }
+
     }
 
     public static JdbcConnectionSource getConnectionSource() {

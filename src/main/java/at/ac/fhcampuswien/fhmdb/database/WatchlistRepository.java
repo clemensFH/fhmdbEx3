@@ -21,25 +21,25 @@ public class WatchlistRepository {
             throw new DatabaseException("Error while adding movie to watchlist", e);
         }
     }
-    public void removeFromWatchlist(WatchlistMovieEntity watchlistMovie) throws SQLException {
-        dao.delete(watchlistMovie);
+
+    public void removeFromWatchlist(WatchlistMovieEntity watchlistMovie) throws DatabaseException {
+        try {
+            dao.delete(watchlistMovie);
+        } catch (SQLException e) {
+            throw new DatabaseException("Error removing movie from watchlist", e);
+        }
     }
+
     public List<WatchlistMovieEntity> getAll() throws DatabaseException { // read all movies
         try {
             return dao.queryForAll();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DatabaseException("Error getting all movies from watchlist", e);
         }
-        return null;
     }
 
     private WatchlistMovieEntity movieToWatchlist(Movie apiMovie) {
-        try {
-            return new WatchlistMovieEntity(apiMovie.getId(), apiMovie.getTitle(), apiMovie.getDescription(), apiMovie.getGenres(), apiMovie.getReleaseYear(), apiMovie.getImgUrl(), apiMovie.getLengthInMinutes(), apiMovie.getRating());
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return new WatchlistMovieEntity(apiMovie.getId(), apiMovie.getTitle(), apiMovie.getDescription(), apiMovie.getGenres(), apiMovie.getReleaseYear(), apiMovie.getImgUrl(), apiMovie.getLengthInMinutes(), apiMovie.getRating());
     }
 }
 

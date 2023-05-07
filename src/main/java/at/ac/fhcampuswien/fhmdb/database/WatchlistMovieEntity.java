@@ -5,6 +5,7 @@ import at.ac.fhcampuswien.fhmdb.models.Genre;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.StringBuilder;
@@ -38,20 +39,18 @@ public class WatchlistMovieEntity {
     @DatabaseField()
     private double rating;
 
-    public WatchlistMovieEntity(){} // no-arg constructor needed so that object can be returned by a query
-    public WatchlistMovieEntity(String apiId, String title, String description, List<Genre> genres, int releaseYear, String imgUrl, int lengthInMinutes, double rating) throws DatabaseException {
-        try {
-            this.apiId = apiId;
-            this.title = title;
-            this.description = description;
-            this.genres = genresToString(genres);
-            this.releaseYear = releaseYear;
-            this.imgUrl = imgUrl;
-            this.lengthInMinutes = lengthInMinutes;
-            this.rating = rating;
-        } catch (Exception e) {
-            throw new DatabaseException("Error creating WatchlistMovieEntity: " + e.getMessage());
-        }
+    public WatchlistMovieEntity() {
+        // empty constructor
+    }
+    public WatchlistMovieEntity(String apiId, String title, String description, List<Genre> genres, int releaseYear, String imgUrl, int lengthInMinutes, double rating)  {
+        this.apiId = apiId;
+        this.title = title;
+        this.description = description;
+        this.genres = genresToString(genres);
+        this.releaseYear = releaseYear;
+        this.imgUrl = imgUrl;
+        this.lengthInMinutes = lengthInMinutes;
+        this.rating = rating;
     }
 
 
@@ -91,7 +90,6 @@ public class WatchlistMovieEntity {
         return rating;
     }
 
-    // ToDo: Genres to String
     public String genresToString(List<Genre> genres) {
         StringBuilder strbul = new StringBuilder();
         for (Genre genresElement : genres) {

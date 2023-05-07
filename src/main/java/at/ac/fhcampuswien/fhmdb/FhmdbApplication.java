@@ -28,12 +28,6 @@ public class FhmdbApplication extends Application {
             alert.setHeaderText("Error while loading home-view.fxml");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Unknown error occurred");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
         }
     }
 
