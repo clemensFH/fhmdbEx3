@@ -3,6 +3,7 @@ package at.ac.fhcampuswien.fhmdb;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
@@ -47,12 +48,17 @@ public class WatchlistController implements Initializable {
     }
 
     public void initializeState() {
-        WatchlistRepository watchlistRepo = new WatchlistRepository();
+        WatchlistRepository watchlistRepo = null;
+        try {
+            watchlistRepo = new WatchlistRepository();
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
         List<WatchlistMovieEntity> result = null;
         try {
             result = watchlistRepo.getAll();
-        } catch (SQLException e) {
-            throw new RuntimeException(e); // Todo
+        } catch (DatabaseException e) {
+            e.printStackTrace();
         }
 
         setMovieList(result);
