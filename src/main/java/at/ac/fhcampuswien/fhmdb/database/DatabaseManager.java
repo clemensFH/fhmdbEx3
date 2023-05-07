@@ -43,6 +43,14 @@ public class DatabaseManager {  // class connects ORMLite & DB
         connectionSource = new JdbcConnectionSource(DB_URL, user, password);
     }
 
+    public static JdbcConnectionSource getConnectionSource() {
+        return connectionSource;
+    }
+
+    public Dao<WatchlistMovieEntity, Long> getWatchlistDao() {
+        return dao;
+    }
+
     /*
     public void testDB() throws SQLException { // III test entry, before final integration
         WatchlistMovieEntity movie = new WatchlistMovieEntity("1234", "The Thing", "bad movie", "ACTION", 1943, "http", 96, 0.5);
