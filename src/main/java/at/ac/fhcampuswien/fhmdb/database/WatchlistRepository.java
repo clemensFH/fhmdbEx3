@@ -16,7 +16,9 @@ public class WatchlistRepository {
 
     public void addToWatchlist(Movie apiMovie) throws DatabaseException {
         try {
-            dao.create(movieToWatchlist(apiMovie));
+            if(!getAll().stream().map(entity -> entity.getApiId()).anyMatch(id -> id.equals(apiMovie.getId()))){
+                dao.create(movieToWatchlist(apiMovie));
+            }
         } catch (SQLException e) {
             throw new DatabaseException("Error while adding movie to watchlist", e);
         }
