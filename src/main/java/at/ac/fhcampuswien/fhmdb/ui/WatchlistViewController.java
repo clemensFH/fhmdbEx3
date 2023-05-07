@@ -4,7 +4,6 @@ import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
 
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +15,7 @@ public class WatchlistViewController {  //to read contacts
         repo = new WatchlistRepository();
         List< WatchlistMovieEntity> watchlist = new ArrayList<>(); // want to have all watchlist-movies when initialized
         try {
-            watchlist = repo.readAllMovies();
+            watchlist = repo.getAll();
         } catch (SQLException e) {
             System.out.println("Cannot load Watchlist"); // ToDO: ? richtige Fehler
         }

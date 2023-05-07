@@ -19,7 +19,7 @@ public class WatchlistRepository {
     public void removeFromWatchlist(Movie watchlistMovie) throws SQLException {
         dao.delete(movieToWatchlist(watchlistMovie));
     }
-    public List<WatchlistMovieEntity> readAllMovies() throws SQLException { // read all movies
+    public List<WatchlistMovieEntity> getAll() throws SQLException { // read all movies
         return dao.queryForAll();
     }
 
