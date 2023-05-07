@@ -1,6 +1,8 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.models.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
@@ -21,6 +23,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -56,6 +59,16 @@ public class HomeController implements Initializable {
 
     protected SortedState sortedState;
 
+    private WatchlistRepository watchlistRepository = new WatchlistRepository();
+
+    private final ClickEventHandler onAddToWatchlistClicked = (clickedItem) ->
+    {
+        try {
+            watchlistRepository.addToWatchlist((Movie) clickedItem);
+        } catch (SQLException e) {
+            throw new RuntimeException(e); // TODO
+        }
+    };
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeState();
@@ -71,7 +84,7 @@ public class HomeController implements Initializable {
 
     public void initializeLayout() {
         movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
-        movieListView.setCellFactory(movieListView -> new MovieCell()); // apply custom cells to the listview
+        movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked)); // apply custom cells to the listview
 
         // genre combobox
         Object[] genres = Genre.values();   // get all genres
@@ -209,4 +222,5 @@ public class HomeController implements Initializable {
         watchlistScene.getStylesheets().add(Objects.requireNonNull(FhmdbApplication.class.getResource("styles.css")).toExternalForm());
         window.setScene(watchlistScene);
     }
+
 }

@@ -21,8 +21,8 @@ public class WatchlistRepository {
             e.printStackTrace();
         }
     }
-    public void removeFromWatchlist(Movie watchlistMovie) throws SQLException {
-        dao.delete(movieToWatchlist(watchlistMovie));
+    public void removeFromWatchlist(WatchlistMovieEntity watchlistMovie) throws SQLException {
+        dao.delete(watchlistMovie);
     }
     public List<WatchlistMovieEntity> getAll() throws DatabaseException { // read all movies
         try {
