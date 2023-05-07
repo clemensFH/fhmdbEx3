@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class FhmdbApplication extends Application {
@@ -20,12 +21,14 @@ public class FhmdbApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
-        /* III test entry, before final integration
+        /*
         try {
             DatabaseManager.getInstance().testDB();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
          */
     }
 

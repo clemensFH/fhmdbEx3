@@ -1,11 +1,13 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
+import at.ac.fhcampuswien.fhmdb.models.Genre;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class DatabaseManager {  // class connects ORMLite & DB
     public static final String DB_URL = "jdbc:h2:file: ./db/watchlistdb"; // I 1. connection to database
@@ -53,8 +55,10 @@ public class DatabaseManager {  // class connects ORMLite & DB
 
     /*
     public void testDB() throws SQLException { // III test entry, before final integration
-        WatchlistMovieEntity movie = new WatchlistMovieEntity("1234", "The Thing", "bad movie", "ACTION", 1943, "http", 96, 0.5);
+        WatchlistMovieEntity movie = new WatchlistMovieEntity("1234", "The Thing", "bad movie", List.of(Genre.valueOf("ACTION")), 1943, "http", 96, 0.5);
         dao.create(movie);
     }
+
      */
+
 }
