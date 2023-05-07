@@ -38,11 +38,11 @@ public class WatchlistMovieEntity {
     private double rating;
 
     public WatchlistMovieEntity(){} // no-arg constructor needed so that object can be returned by a query
-    public WatchlistMovieEntity(String apiId, String title, String description, String genres, int releaseYear, String imgUrl, int lengthInMinutes, double rating) {
+    public WatchlistMovieEntity(String apiId, String title, String description, List<Genre> genres, int releaseYear, String imgUrl, int lengthInMinutes, double rating) {
         this.apiId = apiId;
         this.title = title;
         this.description = description;
-        this.genres = genres;
+        this.genres = genresToString(genres);
         this.releaseYear = releaseYear;
         this.imgUrl = imgUrl;
         this.lengthInMinutes = lengthInMinutes;
@@ -50,7 +50,7 @@ public class WatchlistMovieEntity {
     }
 
     // ToDo: Genres to String
-    static String genresToString(List<Genre> genres) {
+    public String genresToString(List<Genre> genres) {
         StringBuilder strbul = new StringBuilder();
         for (Genre genresElement : genres) {
             strbul.append(genresElement);

@@ -24,7 +24,7 @@ public class WatchlistRepository {
     }
 
     private WatchlistMovieEntity movieToWatchlist(Movie apiMovie) { // ToDo: Genres
-        return new WatchlistMovieEntity(apiMovie.getId(), apiMovie.getTitle(), apiMovie.getDescription(), WatchlistMovieEntity.genresToString(apiMovie.getGenres()), apiMovie.getReleaseYear(), apiMovie.getImgUrl(), apiMovie.getLengthInMinutes(), apiMovie.getRating());
+        return new WatchlistMovieEntity(apiMovie.getId(), apiMovie.getTitle(), apiMovie.getDescription(), apiMovie.getGenres(), apiMovie.getReleaseYear(), apiMovie.getImgUrl(), apiMovie.getLengthInMinutes(), apiMovie.getRating());
     }
 }
 
