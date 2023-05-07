@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
+import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.jfoenix.controls.JFXButton;
 import javafx.geometry.Insets;
@@ -12,7 +13,7 @@ import javafx.scene.paint.Color;
 
 import java.util.stream.Collectors;
 
-public class WatchlistCell extends ListCell<Movie> {
+public class WatchlistCell extends ListCell<WatchlistMovieEntity> {
     private final Label title = new Label();
     private final Label detail = new Label();
     private final Label genre = new Label();
@@ -65,27 +66,17 @@ public class WatchlistCell extends ListCell<Movie> {
         Label length = new Label("Length: " + getItem().getLengthInMinutes() + " minutes");
         Label rating = new Label("Rating: " + getItem().getRating() + "/10");
 
-        Label directors = new Label("Directors: " + String.join(", ", getItem().getDirectors()));
-        Label writers = new Label("Writers: " + String.join(", ", getItem().getWriters()));
-        Label mainCast = new Label("Main Cast: " + String.join(", ", getItem().getMainCast()));
-
         releaseYear.getStyleClass().add("text-white");
         length.getStyleClass().add("text-white");
         rating.getStyleClass().add("text-white");
-        directors.getStyleClass().add("text-white");
-        writers.getStyleClass().add("text-white");
-        mainCast.getStyleClass().add("text-white");
 
         details.getChildren().add(releaseYear);
         details.getChildren().add(rating);
         details.getChildren().add(length);
-        details.getChildren().add(directors);
-        details.getChildren().add(writers);
-        details.getChildren().add(mainCast);
         return details;
     }
     @Override
-    protected void updateItem(Movie movie, boolean empty) {
+    protected void updateItem(WatchlistMovieEntity movie, boolean empty) {
         super.updateItem(movie, empty);
 
         if (empty || movie == null) {
@@ -100,10 +91,7 @@ public class WatchlistCell extends ListCell<Movie> {
                             : "No description available"
             );
 
-            String genres = movie.getGenres()
-                    .stream()
-                    .map(Enum::toString)
-                    .collect(Collectors.joining(", "));
+            String genres = movie.getGenres();
             genre.setText(genres);
 
             detail.setMaxWidth(this.getScene().getWidth() - 30);
