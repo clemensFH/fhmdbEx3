@@ -2,23 +2,20 @@ package at.ac.fhcampuswien.fhmdb.ui;
 
 import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WatchlistViewController {  //to read contacts
-    public void initialize() {
+    public void initialize() throws DatabaseException {
         WatchlistRepository repo;
         System.out.println("WatchlistController initialized");
 
         repo = new WatchlistRepository();
         List< WatchlistMovieEntity> watchlist = new ArrayList<>(); // want to have all watchlist-movies when initialized
-        try {
-            watchlist = repo.getAll();
-        } catch (SQLException e) {
-            System.out.println("Cannot load Watchlist"); // ToDO: ? richtige Fehler
-        }
+        watchlist = repo.getAll();
 
         for (WatchlistMovieEntity item : watchlist) { // ToDo: Kontakte sollten auf Konsole ausgegeben werden & noch kein Watchlist Button
             System.out.println(item);

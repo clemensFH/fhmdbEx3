@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.j256.ormlite.dao.Dao;
 
@@ -9,22 +10,36 @@ import java.util.List;
 public class WatchlistRepository {
     Dao<WatchlistMovieEntity,Long> dao;
 
-    public WatchlistRepository () {
+    public WatchlistRepository () throws DatabaseException {
         this.dao = DatabaseManager.getInstance().getDao();
     }
 
-    public void addToWatchlist(Movie apiMovie) throws SQLException {
-        dao.create(movieToWatchlist(apiMovie));  // ? ToDO optional: überprüfen, ob User dem entspricht, was man erwartet
+    public void addToWatchlist(Movie apiMovie) throws DatabaseException {
+        try {
+            dao.create(movieToWatchlist(apiMovie));  // ? ToDO optional: überprüfen, ob User dem entspricht, was man erwartet
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     public void removeFromWatchlist(Movie watchlistMovie) throws SQLException {
         dao.delete(movieToWatchlist(watchlistMovie));
     }
-    public List<WatchlistMovieEntity> getAll() throws SQLException { // read all movies
-        return dao.queryForAll();
+    public List<WatchlistMovieEntity> getAll() throws DatabaseException { // read all movies
+        try {
+            return dao.queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private WatchlistMovieEntity movieToWatchlist(Movie apiMovie) { // ToDo: Genres
-        return new WatchlistMovieEntity(apiMovie.getId(), apiMovie.getTitle(), apiMovie.getDescription(), apiMovie.getGenres(), apiMovie.getReleaseYear(), apiMovie.getImgUrl(), apiMovie.getLengthInMinutes(), apiMovie.getRating());
+        try {
+            return new WatchlistMovieEntity(apiMovie.getId(), apiMovie.getTitle(), apiMovie.getDescription(), apiMovie.getGenres(), apiMovie.getReleaseYear(), apiMovie.getImgUrl(), apiMovie.getLengthInMinutes(), apiMovie.getRating());
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 
