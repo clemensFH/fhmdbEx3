@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
 import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
+import at.ac.fhcampuswien.fhmdb.models.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.jfoenix.controls.JFXButton;
 import javafx.geometry.Insets;
@@ -22,7 +23,7 @@ public class WatchlistCell extends ListCell<WatchlistMovieEntity> {
     private final VBox layout = new VBox(title, detail, genre, removeBtn, detailBtn);
     private boolean collapsedDetails = true;
 
-    public WatchlistCell() {
+    public WatchlistCell(ClickEventHandler removeFromWatchListClicked) {
         super();
         // color scheme
         detailBtn.setStyle("-fx-background-color: #f5c518;");
@@ -54,9 +55,7 @@ public class WatchlistCell extends ListCell<WatchlistMovieEntity> {
         });
 
         removeBtn.setOnMouseClicked(mouseEvent -> {
-            // todo
-            // Movie von Watchlist entfernen
-            // siehe Angabe Punkt Business/Logic-Layer
+            removeFromWatchListClicked.onClick(getItem());
         });
     }
 
