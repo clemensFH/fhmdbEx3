@@ -27,6 +27,15 @@ public class FhmdbApplication extends Application {
             alert.showAndWait();
             System.exit(1);
         }
+         /*
+        try {
+            DatabaseManager.getInstance().testDB();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+         */
     }
 
     public static void main(String[] args) {
