@@ -23,19 +23,18 @@ public class FhmdbApplication extends Application {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Fehler beim Laden der FXML-Datei: " + e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error while loading home-view.fxml");
+            alert.setContentText(e.getMessage());
             alert.showAndWait();
-            System.exit(1);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Unknown error occurred");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
-         /*
-        try {
-            DatabaseManager.getInstance().testDB();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
-         */
     }
 
     public static void main(String[] args) {

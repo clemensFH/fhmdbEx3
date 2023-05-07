@@ -40,7 +40,15 @@ public class WatchlistController implements Initializable {
 
     protected ObservableList<WatchlistMovieEntity> observableMovies = FXCollections.observableArrayList();
 
-    WatchlistRepository watchlistRepository = new WatchlistRepository();
+    WatchlistRepository watchlistRepository;
+
+    {
+        try {
+            watchlistRepository = new WatchlistRepository();
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+    }
 
     private final ClickEventHandler onRemoveFromWatchlistClicked = (clickedItem) ->
     {

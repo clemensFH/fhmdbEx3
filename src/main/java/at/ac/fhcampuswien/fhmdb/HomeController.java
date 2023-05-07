@@ -2,6 +2,7 @@ package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -65,10 +66,14 @@ public class HomeController implements Initializable {
     {
         try {
             watchlistRepository.addToWatchlist((Movie) clickedItem);
-        } catch (SQLException e) {
-            throw new RuntimeException(e); // TODO
+        } catch (DatabaseException e) {
+            e.printStackTrace();
         }
     };
+
+    public HomeController() throws DatabaseException {
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeState();
