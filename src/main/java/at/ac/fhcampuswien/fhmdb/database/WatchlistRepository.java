@@ -16,9 +16,9 @@ public class WatchlistRepository {
 
     public void addToWatchlist(Movie apiMovie) throws DatabaseException {
         try {
-            dao.create(movieToWatchlist(apiMovie));  // ? ToDO optional: überprüfen, ob User dem entspricht, was man erwartet
+            dao.create(movieToWatchlist(apiMovie));
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DatabaseException("Error while adding movie to watchlist", e);
         }
     }
     public void removeFromWatchlist(WatchlistMovieEntity watchlistMovie) throws SQLException {
@@ -33,7 +33,7 @@ public class WatchlistRepository {
         return null;
     }
 
-    private WatchlistMovieEntity movieToWatchlist(Movie apiMovie) { // ToDo: Genres
+    private WatchlistMovieEntity movieToWatchlist(Movie apiMovie) {
         try {
             return new WatchlistMovieEntity(apiMovie.getId(), apiMovie.getTitle(), apiMovie.getDescription(), apiMovie.getGenres(), apiMovie.getReleaseYear(), apiMovie.getImgUrl(), apiMovie.getLengthInMinutes(), apiMovie.getRating());
         } catch (DatabaseException e) {

@@ -56,9 +56,14 @@ public class WatchlistController implements Initializable {
             watchlistRepository.removeFromWatchlist((WatchlistMovieEntity) clickedItem);
             initializeState();
         } catch (SQLException e) {
-            throw new RuntimeException(e); //TODO
+            try {
+                throw new DatabaseException("Exception occurred while removing from Watchlist: " + e.getMessage(), e);
+            } catch (DatabaseException ex) {
+                ex.printStackTrace();
+            }
         }
     };
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

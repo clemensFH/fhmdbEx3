@@ -62,10 +62,5 @@ public class DatabaseManager {  // class connects ORMLite & DB
         return dao;
     }
 
-    /*
-    public void testDB() throws SQLException { // III test entry, before final integration
-        WatchlistMovieEntity movie = new WatchlistMovieEntity("1234", "The Thing", "bad movie", "ACTION", 1943, "http", 96, 0.5);
-        dao.create(movie);
-    }
-     */
+
 }
