@@ -3,6 +3,7 @@ package at.ac.fhcampuswien.fhmdb;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.models.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
@@ -38,7 +39,17 @@ public class WatchlistController implements Initializable {
 
     protected ObservableList<WatchlistMovieEntity> observableMovies = FXCollections.observableArrayList();
 
-    protected SortedState sortedState;
+    WatchlistRepository watchlistRepository = new WatchlistRepository();
+
+    private final ClickEventHandler onRemoveFromWatchlistClicked = (clickedItem) ->
+    {
+        try {
+            watchlistRepository.removeFromWatchlist((WatchlistMovieEntity) clickedItem);
+            initializeState();
+        } catch (SQLException e) {
+            throw new RuntimeException(e); //TODO
+        }
+    };
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -56,12 +67,11 @@ public class WatchlistController implements Initializable {
         }
 
         setMovieList(result);
-        sortedState = SortedState.NONE;
     }
 
     public void initializeLayout() {
         watchListView.setItems(observableMovies);   // set the items of the listview to the observable list
-        watchListView.setCellFactory(movieListView -> new WatchlistCell()); // apply custom cells to the listview
+        watchListView.setCellFactory(movieListView -> new WatchlistCell(onRemoveFromWatchlistClicked)); // apply custom cells to the listview
     }
 
     public void setMovieList(List<WatchlistMovieEntity> movies) {

@@ -16,8 +16,8 @@ public class WatchlistRepository {
     public void addToWatchlist(Movie apiMovie) throws SQLException {
         dao.create(movieToWatchlist(apiMovie));  // ? ToDO optional: überprüfen, ob User dem entspricht, was man erwartet
     }
-    public void removeFromWatchlist(Movie watchlistMovie) throws SQLException {
-        dao.delete(movieToWatchlist(watchlistMovie));
+    public void removeFromWatchlist(WatchlistMovieEntity watchlistMovie) throws SQLException {
+        dao.delete(watchlistMovie);
     }
     public List<WatchlistMovieEntity> getAll() throws SQLException { // read all movies
         return dao.queryForAll();

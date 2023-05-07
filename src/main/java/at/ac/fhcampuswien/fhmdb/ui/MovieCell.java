@@ -23,7 +23,7 @@ public class MovieCell extends ListCell<Movie> {
     private final VBox layout = new VBox(title, detail, genre,addBtn, detailBtn);
     private boolean collapsedDetails = true;
 
-    public MovieCell() {
+    public MovieCell(ClickEventHandler addToWatchlistClicked) {
         super();
         // color scheme
         detailBtn.setStyle("-fx-background-color: #f5c518;");
@@ -55,21 +55,8 @@ public class MovieCell extends ListCell<Movie> {
         });
 
         addBtn.setOnMouseClicked(mouseEvent -> {
-            // todo
-            // Movie zur Watchlist hinzufügen
-            // siehe Angabe Punkt Business/Logic-Layer
+            addToWatchlistClicked.onClick(getItem());
         });
-        /*
-        addToWatchlistBtn.setOnMouseClicked(mouseEvent -> { // T: mouseclickEvent adds movie
-            // try-Catch, weil UserCell n. propagieren
-            try {
-                repository.addToWatchlist(getItem());   //? getItem;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            //DatabaseManager.getInstance().dao.create();
-
-        */
     }
 
     private VBox getDetails() {
