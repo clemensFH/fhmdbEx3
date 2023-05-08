@@ -244,6 +244,7 @@ public class HomeController implements Initializable {
     }
 
     public void watchlistBtnClicked(ActionEvent actionEvent) throws IOException {
+        //ToDo: Try-Catch, weil Exception kann nicht in fxml gehandelt werden
         Parent root = FXMLLoader.load(getClass().getResource("watchlist-view.fxml"));
 
         Stage window = (Stage)watchlistBtn.getScene().getWindow();

@@ -30,7 +30,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-
+//ToDo: Code duplication reduzierbar
 public class WatchlistController implements Initializable {
 
     @FXML

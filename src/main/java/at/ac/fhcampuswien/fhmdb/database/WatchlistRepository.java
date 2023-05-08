@@ -11,11 +11,12 @@ public class WatchlistRepository {
     Dao<WatchlistMovieEntity,Long> dao;
 
     public WatchlistRepository () throws DatabaseException {
-        this.dao = DatabaseManager.getInstance().getDao();
+        this.dao = DatabaseManager.getInstance().getWatchlistDao();
     }
 
     public void addToWatchlist(Movie apiMovie) throws DatabaseException {
         try {
+            //ToDo: Ressourcenschonendere Methode möglich
             if(!getAll().stream().map(entity -> entity.getApiId()).anyMatch(id -> id.equals(apiMovie.getId()))){
                 dao.create(movieToWatchlist(apiMovie));
             }
