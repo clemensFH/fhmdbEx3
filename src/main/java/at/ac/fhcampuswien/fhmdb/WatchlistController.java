@@ -13,6 +13,7 @@ import at.ac.fhcampuswien.fhmdb.ui.WatchlistCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,7 +32,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 
-public class WatchlistController implements Initializable {
+public class WatchlistController implements Initializable, Observer{
 
     @FXML
     public JFXListView watchListView;
@@ -75,6 +76,7 @@ public class WatchlistController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeState();
         initializeLayout();
+        watchlistRepository.addObserver(this); // Registrieren des WatchlistControllers als Beobachter
     }
 
     public void initializeState() {
@@ -93,6 +95,7 @@ public class WatchlistController implements Initializable {
 
         try {
             result = watchlistRepo.getAll();
+            watchlistRepository.addObserver(this); // Registrieren des WatchlistControllers als Beobachter
         } catch (DatabaseException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -120,6 +123,15 @@ public class WatchlistController implements Initializable {
 
         Stage window = (Stage)homeviewBtn.getScene().getWindow();
         window.setScene(new Scene(root, 890, 620));
+    }
+
+
+    @Override
+    public void update(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Watchlist");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 
