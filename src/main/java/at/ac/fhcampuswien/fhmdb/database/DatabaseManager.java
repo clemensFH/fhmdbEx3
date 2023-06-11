@@ -17,8 +17,8 @@ public class DatabaseManager {  // class connects ORMLite & DB
     private static final String DATABASE_ERROR_MESSAGE = "DatabaseException: Error while accessing database. Please try again later.\n";
 
 
-    private static DatabaseManager instance; // II 4. Singleton Pattern, allowing only 1 object to be instantiated at a time
-    private DatabaseManager() throws DatabaseException {  // II 4. constructor
+    private static DatabaseManager instance; // II 4. Singleton Pattern: instance variable - allowing only 1 object to be instantiated at a time
+    private DatabaseManager() throws DatabaseException {  // II 4. constructor: private
         try {
             createConnectionSource(); // 1. create connection
             dao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class); // 2. fill up dao 15

@@ -41,11 +41,13 @@ public class WatchlistController implements Initializable {
 
     protected ObservableList<WatchlistMovieEntity> observableMovies = FXCollections.observableArrayList();
 
-    WatchlistRepository watchlistRepository;
+    WatchlistRepository watchlistRepository = WatchlistRepository.getInstance();    //1e.
 
-    {
+    /*
+        {
         try {
             watchlistRepository = new WatchlistRepository();
+            //WatchlistRepository.getInstance();
         } catch (DatabaseException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -54,6 +56,8 @@ public class WatchlistController implements Initializable {
             alert.showAndWait();
         }
     }
+     */
+
 
     private final ClickEventHandler onRemoveFromWatchlistClicked = (clickedItem) ->
     {
@@ -77,8 +81,12 @@ public class WatchlistController implements Initializable {
         initializeLayout();
     }
 
-    public void initializeState() {
-        WatchlistRepository watchlistRepo = null;
+    public void initializeState() { //1f.
+        watchlistRepository = null;     //?? Wozu brauchen wir hier null?
+        watchlistRepository = WatchlistRepository.getInstance();
+
+        /*
+         WatchlistRepository watchlistRepo = null;
         try {
             watchlistRepo = new WatchlistRepository();
         } catch (DatabaseException e) {
@@ -88,11 +96,12 @@ public class WatchlistController implements Initializable {
             alert.setContentText("Could not connect to the database");
             alert.showAndWait();
         }
+         */
 
         List<WatchlistMovieEntity> result = null;
 
         try {
-            result = watchlistRepo.getAll();
+            result = watchlistRepository.getAll();  //1g.
         } catch (DatabaseException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

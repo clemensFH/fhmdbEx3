@@ -7,11 +7,24 @@ import com.j256.ormlite.dao.Dao;
 import java.sql.SQLException;
 import java.util.List;
 
+//Layer wraps Dao (abstrahiert)
 public class WatchlistRepository {
     Dao<WatchlistMovieEntity,Long> dao;
+    private static WatchlistRepository instance; //1a. Singleton Pattern: private static instance
 
-    public WatchlistRepository () throws DatabaseException {
+    private WatchlistRepository () throws DatabaseException {   //1b. constructor: private
         this.dao = DatabaseManager.getInstance().getWatchlistDao();
+    }
+
+    public static WatchlistRepository getInstance() {   //1c.
+        if (instance == null) {
+            try {
+                instance = new WatchlistRepository();
+            } catch (DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return instance;
     }
 
     public void addToWatchlist(Movie apiMovie) throws DatabaseException {
@@ -33,7 +46,7 @@ public class WatchlistRepository {
         }
     }
 
-    public List<WatchlistMovieEntity> getAll() throws DatabaseException { // read all movies
+    public List<WatchlistMovieEntity> getAll() throws DatabaseException { // read all movies (im Watchlist Screen ausrufen & movies auslesen)
         try {
             return dao.queryForAll();
         } catch (SQLException e) {
