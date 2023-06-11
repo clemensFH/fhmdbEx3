@@ -9,11 +9,11 @@ public class WachtlistControllerFactory implements Callback<Class<?>, Object> {
     private static WatchlistController watchlistController;
     @Override
     public Object call(Class<?> aClass) {
-        System.out.println("Watch factory");
+        System.out.println("WatchlistController factory");
         if(watchlistController == null){
-            System.out.println("newly created");
             try {
                 watchlistController = (WatchlistController) aClass.getDeclaredConstructor().newInstance();
+                System.out.println("newly created");
             } catch (Exception e) {
                 WatchlistController.showError(e.getMessage());
             }

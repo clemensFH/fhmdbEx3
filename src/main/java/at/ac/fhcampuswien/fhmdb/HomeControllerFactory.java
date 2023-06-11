@@ -11,7 +11,7 @@ public class HomeControllerFactory implements Callback<Class<?>, Object> {
 
     @Override
     public Object call(Class<?> aClass) {
-        System.out.println("Home factory");
+        System.out.println("HomeController factory");
         if (homeController == null) {
             try {
                 System.out.println("newly created");
