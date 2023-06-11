@@ -5,7 +5,6 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import javafx.scene.control.Alert;
 
 import java.sql.SQLException;
 
@@ -36,7 +35,7 @@ public class DatabaseManager {  // class connects ORMLite & DB
         }
         return instance;
     }
-    public Dao<WatchlistMovieEntity, Long> getDao() {
+    public Dao<WatchlistMovieEntity, Long> getWatchlistDao() {
         return this.dao;
     }
 
@@ -55,14 +54,7 @@ public class DatabaseManager {  // class connects ORMLite & DB
         }
 
     }
-
     public static JdbcConnectionSource getConnectionSource() {
         return connectionSource;
     }
-
-    public Dao<WatchlistMovieEntity, Long> getWatchlistDao() {
-        return dao;
-    }
-
-
 }

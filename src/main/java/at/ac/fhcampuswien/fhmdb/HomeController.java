@@ -7,7 +7,8 @@ import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
-import at.ac.fhcampuswien.fhmdb.models.SortedState;
+import at.ac.fhcampuswien.fhmdb.models.sorting.DefaultSortingState;
+import at.ac.fhcampuswien.fhmdb.models.sorting.SortingState;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -26,10 +27,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
     @FXML
@@ -58,9 +56,9 @@ public class HomeController implements Initializable {
 
     public List<Movie> allMovies;
 
-    protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
+    public ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
-    protected SortedState sortedState;
+    public SortingState sortingState;
 
     private WatchlistRepository watchlistRepository = new WatchlistRepository();
 
@@ -99,7 +97,15 @@ public class HomeController implements Initializable {
         }
         setMovies(result);
         setMovieList(result);
-        sortedState = SortedState.NONE;
+        sortingState = new DefaultSortingState(this);
+    }
+
+    public static void showError(String errormsg){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("An error occurred while trying to initialize HomeController");
+        alert.setContentText(errormsg);
+        alert.showAndWait();
     }
 
     public void initializeLayout() {
@@ -142,49 +148,43 @@ public class HomeController implements Initializable {
         observableMovies.addAll(movies);
     }
 
-    public void sortMovies(){
-        if (sortedState == SortedState.NONE || sortedState == SortedState.DESCENDING) {
-            sortMovies(SortedState.ASCENDING);
-        } else if (sortedState == SortedState.ASCENDING) {
-            sortMovies(SortedState.DESCENDING);
-        }
+    public void sortMovies(boolean isFiltered) {
+        sortingState.sortObservableMovies(isFiltered);
     }
+
     // sort movies based on sortedState
     // by default sorted state is NONE
-    // afterwards it switches between ascending and descending
-    public void sortMovies(SortedState sortDirection) {
-        if (sortDirection == SortedState.ASCENDING) {
-            observableMovies.sort(Comparator.comparing(Movie::getTitle));
-            sortedState = SortedState.ASCENDING;
-        } else {
-            observableMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
-            sortedState = SortedState.DESCENDING;
-        }
-    }
+    // afterward it switches between ascending and descending
 
-    public List<Movie> filterByQuery(List<Movie> movies, String query){
-        if(query == null || query.isEmpty()) return movies;
+    public List<Movie> filterByQuery(List<Movie> movies, String query) {
+        if (query == null || query.isEmpty()) return movies;
 
-        if(movies == null) {
+        if (movies == null) {
             throw new IllegalArgumentException("movies must not be null");
         }
 
         return movies.stream().filter(movie ->
-                movie.getTitle().toLowerCase().contains(query.toLowerCase()) ||
-                movie.getDescription().toLowerCase().contains(query.toLowerCase()))
+                        movie.getTitle().toLowerCase().contains(query.toLowerCase()) ||
+                                movie.getDescription().toLowerCase().contains(query.toLowerCase()))
                 .toList();
     }
 
-    public List<Movie> filterByGenre(List<Movie> movies, Genre genre){
-        if(genre == null) return movies;
+    public List<Movie> filterByGenre(List<Movie> movies, Genre genre) {
+        if (genre == null) return movies;
 
-        if(movies == null) {
+        if (movies == null) {
             throw new IllegalArgumentException("movies must not be null");
         }
 
         return movies.stream().filter(movie -> movie.getGenres().contains(genre)).toList();
     }
 
+    /**
+     * Utilises filters in old style.
+     *
+     * @deprecated use {@link #getMovies(String, Genre, String, String)} instead.
+     */
+    @Deprecated
     public void applyAllFilters(String searchQuery, Object genre) {
         List<Movie> filteredMovies = allMovies;
 
@@ -207,7 +207,7 @@ public class HomeController implements Initializable {
         String genreValue = validateComboboxValue(genreComboBox.getSelectionModel().getSelectedItem());
 
         Genre genre = null;
-        if(genreValue != null) {
+        if (genreValue != null) {
             genre = Genre.valueOf(genreValue);
         }
 
@@ -216,11 +216,12 @@ public class HomeController implements Initializable {
         setMovieList(movies);
         // applyAllFilters(searchQuery, genre);
 
-        sortMovies(sortedState);
+        // sort movies using State pattern
+        sortMovies(true);
     }
 
     public String validateComboboxValue(Object value) {
-        if(value != null && !value.toString().equals("No filter")) {
+        if (value != null && !value.toString().equals("No filter")) {
             return value.toString();
         }
         return null;
@@ -240,16 +241,25 @@ public class HomeController implements Initializable {
     }
 
     public void sortBtnClicked(ActionEvent actionEvent) {
-        sortMovies();
+        // sort movies using State pattern
+        sortMovies(false);
     }
 
     public void watchlistBtnClicked(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("watchlist-view.fxml"));
+        //ToDo: Try-Catch, weil Exception kann nicht in fxml gehandelt werden
+        WachtlistControllerFactory controllerFactory = new WachtlistControllerFactory();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("watchlist-view.fxml"));
+        loader.setControllerFactory(controllerFactory);
+        Parent root = loader.load();
 
-        Stage window = (Stage)watchlistBtn.getScene().getWindow();
+        Stage window = (Stage) watchlistBtn.getScene().getWindow();
         Scene watchlistScene = new Scene(root, 890, 620);
         watchlistScene.getStylesheets().add(Objects.requireNonNull(FhmdbApplication.class.getResource("styles.css")).toExternalForm());
         window.setScene(watchlistScene);
+    }
+
+    public void changeState (SortingState state) {
+        this.sortingState = state;
     }
 
 }

@@ -1,17 +1,11 @@
 package at.ac.fhcampuswien.fhmdb;
 
-import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.ClickEventHandler;
-import at.ac.fhcampuswien.fhmdb.models.Genre;
-import at.ac.fhcampuswien.fhmdb.models.Movie;
-import at.ac.fhcampuswien.fhmdb.models.SortedState;
-import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.ui.WatchlistCell;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -23,16 +17,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.*;
 
 
+
 public class WatchlistController implements Initializable, Observer{
+
 
     @FXML
     public JFXListView watchListView;
@@ -70,6 +64,14 @@ public class WatchlistController implements Initializable, Observer{
         initializeState();
 
     };
+
+    public static void showError(String errormsg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("An error occurred while trying to initialize WatchlistController");
+        alert.setContentText(errormsg);
+        alert.showAndWait();
+    }
 
 
     @Override
@@ -119,7 +121,10 @@ public class WatchlistController implements Initializable, Observer{
 
 
     public void homeviewBtnClicked(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("home-view.fxml"));
+        HomeControllerFactory homeControllerFactory = new HomeControllerFactory();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("home-view.fxml"));
+        loader.setControllerFactory(homeControllerFactory);
+        Parent root = loader.load();
 
         Stage window = (Stage)homeviewBtn.getScene().getWindow();
         window.setScene(new Scene(root, 890, 620));

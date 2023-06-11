@@ -14,14 +14,18 @@ public class WatchlistRepository implements Observable {
     private List<Observer> observers; // List to hold the registered observers
     Dao<WatchlistMovieEntity, Long> dao;
 
+
     public WatchlistRepository() throws DatabaseException {
         this.dao = DatabaseManager.getInstance().getDao();
         observers = new ArrayList<>();
+
     }
 
     public void addToWatchlist(Movie apiMovie) throws DatabaseException {
         try {
+
             if (!getAll().stream().map(entity -> entity.getApiId()).anyMatch(id -> id.equals(apiMovie.getId()))) {
+
                 dao.create(movieToWatchlist(apiMovie));
                 notifyObservers("Movie successfully added to watchlist"); // Notify the observers about the event
             } else {
