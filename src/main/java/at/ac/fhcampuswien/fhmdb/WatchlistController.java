@@ -70,6 +70,14 @@ public class WatchlistController implements Initializable {
 
     };
 
+    public static void showError(String errormsg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("An error occurred while trying to initialize WatchlistController");
+        alert.setContentText(errormsg);
+        alert.showAndWait();
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -116,7 +124,10 @@ public class WatchlistController implements Initializable {
 
 
     public void homeviewBtnClicked(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("home-view.fxml"));
+        HomeControllerFactory homeControllerFactory = new HomeControllerFactory();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("home-view.fxml"));
+        loader.setControllerFactory(homeControllerFactory);
+        Parent root = loader.load();
 
         Stage window = (Stage)homeviewBtn.getScene().getWindow();
         window.setScene(new Scene(root, 890, 620));

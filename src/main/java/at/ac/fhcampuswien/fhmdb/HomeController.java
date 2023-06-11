@@ -102,6 +102,14 @@ public class HomeController implements Initializable {
         sortedState = SortedState.NONE;
     }
 
+    public static void showError(String errormsg){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("An error occurred while trying to initialize HomeController");
+        alert.setContentText(errormsg);
+        alert.showAndWait();
+    }
+
     public void initializeLayout() {
         movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
         movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked)); // apply custom cells to the listview
@@ -142,13 +150,14 @@ public class HomeController implements Initializable {
         observableMovies.addAll(movies);
     }
 
-    public void sortMovies(){
+    public void sortMovies() {
         if (sortedState == SortedState.NONE || sortedState == SortedState.DESCENDING) {
             sortMovies(SortedState.ASCENDING);
         } else if (sortedState == SortedState.ASCENDING) {
             sortMovies(SortedState.DESCENDING);
         }
     }
+
     // sort movies based on sortedState
     // by default sorted state is NONE
     // afterwards it switches between ascending and descending
@@ -162,23 +171,23 @@ public class HomeController implements Initializable {
         }
     }
 
-    public List<Movie> filterByQuery(List<Movie> movies, String query){
-        if(query == null || query.isEmpty()) return movies;
+    public List<Movie> filterByQuery(List<Movie> movies, String query) {
+        if (query == null || query.isEmpty()) return movies;
 
-        if(movies == null) {
+        if (movies == null) {
             throw new IllegalArgumentException("movies must not be null");
         }
 
         return movies.stream().filter(movie ->
-                movie.getTitle().toLowerCase().contains(query.toLowerCase()) ||
-                movie.getDescription().toLowerCase().contains(query.toLowerCase()))
+                        movie.getTitle().toLowerCase().contains(query.toLowerCase()) ||
+                                movie.getDescription().toLowerCase().contains(query.toLowerCase()))
                 .toList();
     }
 
-    public List<Movie> filterByGenre(List<Movie> movies, Genre genre){
-        if(genre == null) return movies;
+    public List<Movie> filterByGenre(List<Movie> movies, Genre genre) {
+        if (genre == null) return movies;
 
-        if(movies == null) {
+        if (movies == null) {
             throw new IllegalArgumentException("movies must not be null");
         }
 
@@ -207,7 +216,7 @@ public class HomeController implements Initializable {
         String genreValue = validateComboboxValue(genreComboBox.getSelectionModel().getSelectedItem());
 
         Genre genre = null;
-        if(genreValue != null) {
+        if (genreValue != null) {
             genre = Genre.valueOf(genreValue);
         }
 
@@ -220,7 +229,7 @@ public class HomeController implements Initializable {
     }
 
     public String validateComboboxValue(Object value) {
-        if(value != null && !value.toString().equals("No filter")) {
+        if (value != null && !value.toString().equals("No filter")) {
             return value.toString();
         }
         return null;
@@ -245,9 +254,12 @@ public class HomeController implements Initializable {
 
     public void watchlistBtnClicked(ActionEvent actionEvent) throws IOException {
         //ToDo: Try-Catch, weil Exception kann nicht in fxml gehandelt werden
-        Parent root = FXMLLoader.load(getClass().getResource("watchlist-view.fxml"));
+        WachtlistControllerFactory controllerFactory = new WachtlistControllerFactory();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("watchlist-view.fxml"));
+        loader.setControllerFactory(controllerFactory);
+        Parent root = loader.load();
 
-        Stage window = (Stage)watchlistBtn.getScene().getWindow();
+        Stage window = (Stage) watchlistBtn.getScene().getWindow();
         Scene watchlistScene = new Scene(root, 890, 620);
         watchlistScene.getStylesheets().add(Objects.requireNonNull(FhmdbApplication.class.getResource("styles.css")).toExternalForm());
         window.setScene(watchlistScene);
