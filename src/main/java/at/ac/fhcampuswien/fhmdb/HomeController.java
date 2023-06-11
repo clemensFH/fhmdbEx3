@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class HomeController implements Initializable {
+public class HomeController implements Initializable, Observer {
     @FXML
     public JFXButton searchBtn;
 
@@ -76,6 +76,7 @@ public class HomeController implements Initializable {
     };
 
     public HomeController() throws DatabaseException {
+        watchlistRepository.addObserver(this);
     }
 
     @Override
@@ -260,6 +261,17 @@ public class HomeController implements Initializable {
 
     public void changeState (SortingState state) {
         this.sortingState = state;
+    }
+
+    @Override
+    public void update(String message) {
+        System.out.println("Update: " + message);
+
+        // Show an information alert with the update message
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Watchlist");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }

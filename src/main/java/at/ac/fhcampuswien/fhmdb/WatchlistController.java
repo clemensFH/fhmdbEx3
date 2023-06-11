@@ -25,7 +25,7 @@ import java.util.*;
 
 
 
-public class WatchlistController implements Initializable, Observer{
+public class WatchlistController implements Initializable{
 
 
     @FXML
@@ -78,7 +78,7 @@ public class WatchlistController implements Initializable, Observer{
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeState();
         initializeLayout();
-        watchlistRepository.addObserver(this);  // Register this WatchlistController as an observer
+        // Register this WatchlistController as an observer
     }
 
     public void initializeState() {
@@ -97,7 +97,7 @@ public class WatchlistController implements Initializable, Observer{
 
         try {
             result = watchlistRepo.getAll();
-            watchlistRepository.addObserver(this); // Register this WatchlistController as an observer
+            // Register this WatchlistController as an observer
         } catch (DatabaseException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -132,14 +132,5 @@ public class WatchlistController implements Initializable, Observer{
 
 
     // Observable
-    @Override
-    public void update(String message) {
-        System.out.println("Update: " + message);
 
-        // Show an information alert with the update message
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Watchlist");
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }
