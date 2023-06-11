@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class FhmdbApplication extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource("home-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 890, 620);
