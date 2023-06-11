@@ -1,9 +1,5 @@
 package at.ac.fhcampuswien.fhmdb.api;
 
-import at.ac.fhcampuswien.fhmdb.models.Genre;
-
-import java.util.UUID;
-
 public class MovieAPIRequestBuilder {
     public static final String DELIMITER = "&";
     private static final String URL = "http://prog2.fh-campuswien.ac.at/movies"; // https if certificates work
@@ -14,57 +10,61 @@ public class MovieAPIRequestBuilder {
     private String ratingForm;    //private double ratingForm;
     private String id;
 
-    private StringBuilder url = new StringBuilder();
-
-
+    private StringBuilder url;
 
     public MovieAPIRequestBuilder(String url) {
         this.url = new StringBuilder();
     }
 
+    private boolean questionmarkSet() {
+        boolean isSet = url.toString().contains("?");
+        return isSet;
+    }
     public MovieAPIRequestBuilder query(String query){
-        this.query = query;
+        if (query != null && !query.isEmpty()) {
+            if(!questionmarkSet()){
+                url.append("?");
+            }
+            url.append("query=").append(query).append(DELIMITER);
+        }
         return this;
     }
     public MovieAPIRequestBuilder genre(String genre){
-        this.genre = genre;
+        if (genre != null) {
+            if(!questionmarkSet()){
+                url.append("?");
+            }
+            url.append("genre=").append(genre).append(DELIMITER);
+        }
         return this;
     }
     public MovieAPIRequestBuilder releaseYear(String releaseYear){
-        this.releaseYear = releaseYear;
+        if (releaseYear != null) {
+            if(!questionmarkSet()){
+                url.append("?");
+            }
+            url.append("releaseYear=").append(releaseYear).append(DELIMITER);
+        }
         return this;
     }
     public MovieAPIRequestBuilder ratingForm(String ratingForm){
-        this.ratingForm = ratingForm;
+        if (ratingForm != null) {
+            if(!questionmarkSet()){
+                url.append("?");
+            }
+            url.append("ratingFrom=").append(ratingForm).append(DELIMITER);
+        }
         return this;
     }
     public MovieAPIRequestBuilder id(String id){
+        if(!questionmarkSet()){
+            url.append("?");
+        }
         this.id = id;
         return this;
     }
-    public String build() { //String query, Genre genre, String releaseYear, String ratingFrom, UUID id
-        StringBuilder url = new StringBuilder();
 
-        if ((query != null && !query.isEmpty()) ||          //if anyone is filled
-                genre != null || releaseYear != null || ratingForm != null) {
-            url.append("?");
-            //check all parameters and add them to the url
-            if (query != null && !query.isEmpty()) {
-                url.append("query=").append(query).append(DELIMITER);
-            }
-            if (genre != null) {
-                url.append("genre=").append(genre).append(DELIMITER);
-            }
-            if (releaseYear != null) {
-                url.append("releaseYear=").append(releaseYear).append(DELIMITER);
-            }
-            if (ratingForm != null) {
-                url.append("ratingFrom=").append(ratingForm).append(DELIMITER);
-            }
-            if (id != null) {
-                url.append("id=").append(id).append(DELIMITER);
-            }
-        }
+    public String build() {
         return url.toString();
     }
 }
