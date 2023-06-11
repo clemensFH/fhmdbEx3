@@ -128,11 +128,11 @@ public class WatchlistController implements Initializable, Observer{
 
     @Override
     public void update(String message) {
+        System.out.println("Update: " + message);
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Watchlist");
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-
 }

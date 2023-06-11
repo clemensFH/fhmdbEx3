@@ -35,6 +35,7 @@ public class WatchlistRepository implements Observable {
     public void removeFromWatchlist(WatchlistMovieEntity watchlistMovie) throws DatabaseException {
         try {
             dao.delete(watchlistMovie);
+            notifyObservers("Movie successfully removed from watchlist");
         } catch (SQLException e) {
             throw new DatabaseException("Error removing movie from watchlist", e);
         }
