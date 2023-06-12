@@ -19,13 +19,14 @@ public class MovieAPI {
     public static List<Movie> getAllMovies() throws MovieApiException {
         return getAllMovies(null, null, null, null);
     }
-    public static List<Movie> getAllMovies(String query, Genre genre, String releaseYear, String ratingFrom) throws MovieApiException{
-        String urlAllQueries = new MovieAPIRequestBuilder(URL)
+    public static List<Movie> getAllMovies(String query, String genre, String releaseYear, String ratingFrom) throws MovieApiException{
+        String urlAllQueries = new MovieAPIRequestBuilder()
                 .query(query)
-                .genre(genre.toString())
+                .genre(genre)
                 .releaseYear(releaseYear)
                 .ratingForm(ratingFrom)
                 .build();
+        System.out.println("query: " + urlAllQueries);
         Request request = new Request.Builder()
                 .url(urlAllQueries)
                 .removeHeader("User-Agent")

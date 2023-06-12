@@ -14,6 +14,12 @@ public class MovieAPIRequestBuilder {
 
     public MovieAPIRequestBuilder(String url) {
         this.url = new StringBuilder();
+        this.url.append(URL);
+    }
+
+    public MovieAPIRequestBuilder() {
+        this.url = new StringBuilder();
+        this.url.append(URL);
     }
 
     private boolean questionmarkSet() {
