@@ -13,12 +13,24 @@ import java.util.List;
 public class WatchlistRepository implements Observable {
     private List<Observer> observers; // List to hold the registered observers
     Dao<WatchlistMovieEntity, Long> dao;
-
+    private static WatchlistRepository instance;
 
     public WatchlistRepository() throws DatabaseException {
+
         this.dao = DatabaseManager.getInstance().getWatchlistDao();
         observers = new ArrayList<>();
 
+    }
+
+    public static WatchlistRepository getInstance() {   //1c.
+        if (instance == null) {
+            try {
+                instance = new WatchlistRepository();
+            } catch (DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return instance;
     }
 
     public void addToWatchlist(Movie apiMovie) throws DatabaseException {
@@ -45,7 +57,7 @@ public class WatchlistRepository implements Observable {
         }
     }
 
-    public List<WatchlistMovieEntity> getAll() throws DatabaseException { // read all movies
+    public List<WatchlistMovieEntity> getAll() throws DatabaseException { // read all movies (im Watchlist Screen ausrufen & movies auslesen)
         try {
             return dao.queryForAll();
         } catch (SQLException e) {

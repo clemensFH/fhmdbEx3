@@ -60,12 +60,12 @@ public class HomeController implements Initializable, Observer {
 
     public SortingState sortingState;
 
-    private WatchlistRepository watchlistRepository = new WatchlistRepository();
+    //private WatchlistRepository watchlistRepository = new WatchlistRepository();
 
     private final ClickEventHandler onAddToWatchlistClicked = (clickedItem) ->
     {
         try {
-            watchlistRepository.addToWatchlist((Movie) clickedItem);
+            WatchlistRepository.getInstance().addToWatchlist((Movie) clickedItem); // 1d. Singleton Pattern
         } catch (DatabaseException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
