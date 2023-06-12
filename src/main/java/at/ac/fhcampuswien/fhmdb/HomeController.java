@@ -60,7 +60,7 @@ public class HomeController implements Initializable, Observer {
 
     public SortingState sortingState;
 
-    //private WatchlistRepository watchlistRepository = new WatchlistRepository();
+    private WatchlistRepository watchlistRepository = WatchlistRepository.getInstance();
 
     private final ClickEventHandler onAddToWatchlistClicked = (clickedItem) ->
     {

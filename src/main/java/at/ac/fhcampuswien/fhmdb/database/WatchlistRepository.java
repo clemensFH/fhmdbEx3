@@ -15,7 +15,7 @@ public class WatchlistRepository implements Observable {
     Dao<WatchlistMovieEntity, Long> dao;
     private static WatchlistRepository instance;
 
-    public WatchlistRepository() throws DatabaseException {
+    private WatchlistRepository() throws DatabaseException {
 
         this.dao = DatabaseManager.getInstance().getWatchlistDao();
         observers = new ArrayList<>();
@@ -51,7 +51,7 @@ public class WatchlistRepository implements Observable {
     public void removeFromWatchlist(WatchlistMovieEntity watchlistMovie) throws DatabaseException {
         try {
             dao.delete(watchlistMovie);
-            notifyObservers("Movie successfully removed from watchlist"); // Notify the observers about the event
+            //notifyObservers("Movie successfully removed from watchlist"); // Notify the observers about the event
         } catch (SQLException e) {
             throw new DatabaseException("Error removing movie from watchlist", e);
         }
