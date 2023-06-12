@@ -212,7 +212,7 @@ public class HomeController implements Initializable, Observer {
             genre = Genre.valueOf(genreValue);
         }
 
-        List<Movie> movies = getMovies(searchQuery, genre, releaseYear, ratingFrom);
+        List<Movie> movies = getMovies(searchQuery, String.valueOf(genre), releaseYear, ratingFrom);
         setMovies(movies);
         setMovieList(movies);
         // applyAllFilters(searchQuery, genre);
@@ -228,7 +228,7 @@ public class HomeController implements Initializable, Observer {
         return null;
     }
 
-    public List<Movie> getMovies(String searchQuery, Genre genre, String releaseYear, String ratingFrom) {
+    public List<Movie> getMovies(String searchQuery, String genre, String releaseYear, String ratingFrom) {
         try {
             return MovieAPI.getAllMovies(searchQuery, genre, releaseYear, ratingFrom);
         } catch (MovieApiException e) {
