@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class WachtlistControllerFactory implements Callback<Class<?>, Object> {
 
+    // Genau wie HomeControllerFactory!
     private static WatchlistController watchlistController;
     @Override
     public Object call(Class<?> aClass) {

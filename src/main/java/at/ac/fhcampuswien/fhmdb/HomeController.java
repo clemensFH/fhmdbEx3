@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class HomeController implements Initializable, Observer {
+public class HomeController implements Initializable, Observer {    //Initializable -> beim Initialisieren der FXML-Datei anzupassen
     @FXML
     public JFXButton searchBtn;
 
@@ -60,8 +60,17 @@ public class HomeController implements Initializable, Observer {
 
     public SortingState sortingState;
 
-    private WatchlistRepository watchlistRepository = WatchlistRepository.getInstance();
+    private WatchlistRepository watchlistRepository = WatchlistRepository.getInstance();    //WatchlistRepository-Klasse, um die Watchlist-Datenbank zu verwalten
 
+    /*
+    Lambda Expression der onAddToWatchlistClicked:
+    die onClick-Methode des ClickEventHandler implementiert (Interface)
+    hat einen einzelnen Parameter clickedItem.
+    Funktionskörper:
+        den geklickten Gegenstand zur Watchlist hinzuzufügen, indem die addToWatchlist-Methode der WatchlistRepository aufgerufen wird.
+        Hier wird das Singleton-Pattern angewendet (da WatchlistRepository eine Singleton-Klasse ist; d.h., es gibt nur eine einzige Instanz dieser Klasse in der Anwendung)
+        Falls Fehler: DatabaseException
+     */
     private final ClickEventHandler onAddToWatchlistClicked = (clickedItem) ->
     {
         try {
@@ -76,20 +85,22 @@ public class HomeController implements Initializable, Observer {
     };
 
     public HomeController() throws DatabaseException {
+        //HomeController als Observer beim WatchlistRepository registriert wird
+        // -> Dadurch kann HomeController über Änderungen in der ObservableList informiert werden und entsprechend reagieren
         watchlistRepository.addObserver(this);
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle) {    // Implementierung der Schnittstelle Initializable.
         initializeState();
         initializeLayout();
     }
 
-    public void initializeState() {
-        List<Movie> result = null;
+    public void initializeState() {     // Anfangszustand von HomeController
+        List<Movie> result = null;  //zuerst result leer
         try {
-            result = MovieAPI.getAllMovies();
-        } catch (MovieApiException e) {
+            result = MovieAPI.getAllMovies();   //result mit Movies aus API befüllen
+        } catch (MovieApiException e) {         //Errormeldung falls problem kommt
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("An error occurred while trying to initialize Move API");
@@ -98,10 +109,10 @@ public class HomeController implements Initializable, Observer {
         }
         setMovies(result);
         setMovieList(result);
-        sortingState = new DefaultSortingState(this);
+        sortingState = new DefaultSortingState(this);   // zuerst DefaultSortingState
     }
 
-    public static void showError(String errormsg){
+    public static void showError(String errormsg){  //Error
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("An error occurred while trying to initialize HomeController");
@@ -113,29 +124,25 @@ public class HomeController implements Initializable, Observer {
         movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
         movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked)); // apply custom cells to the listview
 
-        // genre combobox
+        // GENRE combobox
         Object[] genres = Genre.values();   // get all genres
         genreComboBox.getItems().add("No filter");  // add "no filter" to the combobox
         genreComboBox.getItems().addAll(genres);    // add all genres to the combobox
         genreComboBox.setPromptText("Filter by Genre");
 
-        // year combobox
+        // RELEASEYEAR combobox
         releaseYearComboBox.getItems().add("No filter");  // add "no filter" to the combobox
         // fill array with numbers from 1900 to 2023
         Integer[] years = new Integer[124];
-        for (int i = 0; i < years.length; i++) {
-            years[i] = 1900 + i;
-        }
+        for (int i = 0; i < years.length; i++)  years[i] = 1900 + i;
         releaseYearComboBox.getItems().addAll(years);    // add all years to the combobox
         releaseYearComboBox.setPromptText("Filter by Release Year");
 
-        // rating combobox
+        // RATING combobox
         ratingFromComboBox.getItems().add("No filter");  // add "no filter" to the combobox
         // fill array with numbers from 0 to 10
         Integer[] ratings = new Integer[11];
-        for (int i = 0; i < ratings.length; i++) {
-            ratings[i] = i;
-        }
+        for (int i = 0; i < ratings.length; i++)    ratings[i] = i;
         ratingFromComboBox.getItems().addAll(ratings);    // add all ratings to the combobox
         ratingFromComboBox.setPromptText("Filter by Rating");
     }
@@ -152,11 +159,11 @@ public class HomeController implements Initializable, Observer {
     public void sortMovies(boolean isFiltered) {
         sortingState.sortObservableMovies(isFiltered);
     }
-
     // sort movies based on sortedState
     // by default sorted state is NONE
     // afterward it switches between ascending and descending
 
+    // Searchbar
     public List<Movie> filterByQuery(List<Movie> movies, String query) {
         if (query == null || query.isEmpty()) return movies;
 
@@ -170,6 +177,7 @@ public class HomeController implements Initializable, Observer {
                 .toList();
     }
 
+    // Genre Filter
     public List<Movie> filterByGenre(List<Movie> movies, Genre genre) {
         if (genre == null) return movies;
 
@@ -180,12 +188,8 @@ public class HomeController implements Initializable, Observer {
         return movies.stream().filter(movie -> movie.getGenres().contains(genre)).toList();
     }
 
-    /**
-     * Utilises filters in old style.
-     *
-     * @deprecated use {@link #getMovies(String, Genre, String, String)} instead.
-     */
-    @Deprecated
+
+    @Deprecated //die Methode als veraltet markiert
     public void applyAllFilters(String searchQuery, Object genre) {
         List<Movie> filteredMovies = allMovies;
 
@@ -202,7 +206,7 @@ public class HomeController implements Initializable, Observer {
     }
 
     public void searchBtnClicked(ActionEvent actionEvent) {
-        String searchQuery = searchField.getText().trim().toLowerCase();
+        String searchQuery = searchField.getText().trim().toLowerCase();    //trim(): Trimmen von Leerzeichen
         String releaseYear = validateComboboxValue(releaseYearComboBox.getSelectionModel().getSelectedItem());
         String ratingFrom = validateComboboxValue(ratingFromComboBox.getSelectionModel().getSelectedItem());
         String genreValue = validateComboboxValue(genreComboBox.getSelectionModel().getSelectedItem());
@@ -216,11 +220,11 @@ public class HomeController implements Initializable, Observer {
         setMovies(movies);
         setMovieList(movies);
         // applyAllFilters(searchQuery, genre);
-
         // sort movies using State pattern
         sortMovies(true);
     }
 
+    // Wird COmboboxBox verwendet? Wenn ja dann mach, wenn nein dann null
     public String validateComboboxValue(Object value) {
         if (value != null && !value.toString().equals("No filter")) {
             return value.toString();
@@ -228,8 +232,10 @@ public class HomeController implements Initializable, Observer {
         return null;
     }
 
+
     public List<Movie> getMovies(String searchQuery, String genre, String releaseYear, String ratingFrom) {
         try {
+            //gibt eine Liste von Filmen zurück, die anhand der übergebenen Suchkriterien gefiltert sind
             return MovieAPI.getAllMovies(searchQuery, genre, releaseYear, ratingFrom);
         } catch (MovieApiException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -246,8 +252,8 @@ public class HomeController implements Initializable, Observer {
         sortMovies(false);
     }
 
+    //Wechsel zu Watchlist Seite
     public void watchlistBtnClicked(ActionEvent actionEvent) throws IOException {
-        //ToDo: Try-Catch, weil Exception kann nicht in fxml gehandelt werden
         WachtlistControllerFactory controllerFactory = new WachtlistControllerFactory();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("watchlist-view.fxml"));
         loader.setControllerFactory(controllerFactory);
@@ -263,6 +269,7 @@ public class HomeController implements Initializable, Observer {
         this.sortingState = state;
     }
 
+    //Observer zur Benachrichtigung bei Änderungen.
     @Override
     public void update(String message) {
         System.out.println("Update: " + message);
@@ -273,5 +280,4 @@ public class HomeController implements Initializable, Observer {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
 }

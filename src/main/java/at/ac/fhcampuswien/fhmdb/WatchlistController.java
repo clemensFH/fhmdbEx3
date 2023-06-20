@@ -24,9 +24,8 @@ import java.net.URL;
 import java.util.*;
 
 
-
+// Selbe Prinzip wie HomeController
 public class WatchlistController implements Initializable{
-
 
     @FXML
     public JFXListView watchListView;
@@ -37,22 +36,6 @@ public class WatchlistController implements Initializable{
     protected ObservableList<WatchlistMovieEntity> observableMovies = FXCollections.observableArrayList();
 
     WatchlistRepository watchlistRepository = WatchlistRepository.getInstance();    //1e.
-
-    /*
-        {
-        try {
-            watchlistRepository = new WatchlistRepository();
-            //WatchlistRepository.getInstance();
-        } catch (DatabaseException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("An error occurred while initializing watchlist");
-            alert.setContentText("Could not connect to the database");
-            alert.showAndWait();
-        }
-    }
-     */
-
 
     private final ClickEventHandler onRemoveFromWatchlistClicked = (clickedItem) ->
     {
@@ -88,19 +71,6 @@ public class WatchlistController implements Initializable{
     public void initializeState() { //1f.
         watchlistRepository = null;     //?? Wozu brauchen wir hier null?
         watchlistRepository = WatchlistRepository.getInstance();
-
-        /*
-         WatchlistRepository watchlistRepo = null;
-        try {
-            watchlistRepo = new WatchlistRepository();
-        } catch (DatabaseException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("An error occurred while initializing watchlist");
-            alert.setContentText("Could not connect to the database");
-            alert.showAndWait();
-        }
-         */
 
         List<WatchlistMovieEntity> result = null;
 
@@ -139,8 +109,5 @@ public class WatchlistController implements Initializable{
         Stage window = (Stage)homeviewBtn.getScene().getWindow();
         window.setScene(new Scene(root, 890, 620));
     }
-
-
-    // Observable
 
 }

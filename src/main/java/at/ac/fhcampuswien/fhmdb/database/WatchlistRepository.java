@@ -12,8 +12,8 @@ import java.util.List;
 
 public class WatchlistRepository implements Observable {
     private List<Observer> observers; // List to hold the registered observers
-    Dao<WatchlistMovieEntity, Long> dao;
-    private static WatchlistRepository instance;
+    Dao<WatchlistMovieEntity, Long> dao;    //Zugriff auf die WatchlistMovieEntity in der Database. Über DatabaseManager abgerufen
+    private static WatchlistRepository instance;    //Singleton-Pattern
 
     private WatchlistRepository() throws DatabaseException {
 
@@ -35,7 +35,14 @@ public class WatchlistRepository implements Observable {
 
     public void addToWatchlist(Movie apiMovie) throws DatabaseException {
         try {
-
+            /*
+            getAll(): ruft eine Liste von allen Filmen in der Watchlist ab (von WatchlistMovieEntity-Objekten)
+            stream(): um einen Stream von WatchlistMovieEntity-Objekten zu erzeugen -> ermöglicht das Verarbeiten der Elemente in d. Liste
+            map(entity -> entity.getApiId()): Mit der map()-Operation wird jedes WatchlistMovieEntity-Objekt in den zugehörigen apiId-Wert abgebildet. Das Ergebnis ist ein Stream von apiId-Werten.
+            entity -> entity.getApiId(): Lambda-Expression. Parameterliste: entity -> Funktionskörper: entity.getApiId()
+            anyMatch(id -> id.equals(apiMovie.getId())): Die anyMatch()-Operation prüft, ob irgendein Element im Stream mit dem apiMovie.getId() übereinstimmt.
+                Es wird eine Lambda-Funktion verwendet, um Gleichheit der id-Werte zu überprüfen.
+             */
             if (!getAll().stream().map(entity -> entity.getApiId()).anyMatch(id -> id.equals(apiMovie.getId()))) {
 
                 dao.create(movieToWatchlist(apiMovie));
@@ -65,9 +72,11 @@ public class WatchlistRepository implements Observable {
         }
     }
 
+    // wandelt ein Movie-Objekt aus der API in ein WatchlistMovieEntity-Objekt um
     private WatchlistMovieEntity movieToWatchlist(Movie apiMovie) {
         return new WatchlistMovieEntity(apiMovie.getId(), apiMovie.getTitle(), apiMovie.getDescription(), apiMovie.getGenres(), apiMovie.getReleaseYear(), apiMovie.getImgUrl(), apiMovie.getLengthInMinutes(), apiMovie.getRating());
     }
+
 
     // Implementing Observable interface methods:
 

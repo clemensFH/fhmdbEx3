@@ -13,8 +13,8 @@ public class DefaultSortingState implements SortingState{
     }
 
     @Override
-    public void sortObservableMovies(boolean isFiltered) {
+    public void sortObservableMovies(boolean isFiltered) {  //Methode aus SortingState-Interface , um die Liste der observeble Filme zu sortieren
         homeController.observableMovies.sort(Comparator.comparing(Movie::getTitle));
-        homeController.changeState(new AscendingSortingState(homeController));
+        homeController.changeState(new AscendingSortingState(homeController));  // Zustand des HomeController auf AscendingSortingState geändert
     }
 }

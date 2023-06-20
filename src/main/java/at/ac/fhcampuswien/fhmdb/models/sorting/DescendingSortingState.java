@@ -7,6 +7,7 @@ import java.util.Comparator;
 
 public class DescendingSortingState implements SortingState{
 
+    //selbe wie AscendingSortingState nur umgekehrt.
     public HomeController homeController;
     public DescendingSortingState(HomeController homeController) {
         this.homeController = homeController;
